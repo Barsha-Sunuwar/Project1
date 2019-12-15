@@ -2,91 +2,77 @@ from tkinter import *
 from stegano import lsb
 from tkinter import filedialog
 from tkinter import ttk
-from tkinter import messagebox as msBox
+from tkinter import messagebox
 import datetime
 import re
-#Process to do (Encrypt or Decrypt)
-def click():
-    root = Tk()
-    root.title("Spychat")
-    root.geometry("700x300")
-    root.resizable(0, 0)
-    tab = ttk.Notebook(root)
-    tab1 = ttk.Frame(tab)
-    tab2 = ttk.Frame(tab)
-    tab.add(tab1, text="Encryption")
-    tab.add(tab2, text="Decryption")
-    tab.pack(expand=1, fill="both")
+def browse():
+    global filename
+    filename = filedialog.askopenfilename(initialdir="/root/Desktop/images",filetypes=(("png files","*.png"),("jpg files","*.jpg"),("jpeg files","*.jpeg")))
+    path = filename
 
-    # encoding
-    def browse(path):
-        filename = filedialog.askopenfilename()
-        if re.search('\.jpg$', filename) or re.search('\.png$', filename):
-            # path_entry.config(text="path to the file")
-            # path_entry.insert(0,filename)
-            path.set(filename)
+def encrpt_ok(path,message):
+    hide=lsb.hide(path,message)
+    hide.save('C:/Users/admin/Desktop/images/secret_message.png')
+    messagebox.showinfo("saved","the image is saved with....")
 
-        else:
-            msBox.showinfo("You have choosen a wrong file, it is neither jpg nor png")
+def enc(filename):
+    encrpt=Toplevel(root)
+    encrpt.geometry("400x200")
+    encrpt.config(bg='maroon')
+    encrpt.resizable(0,0)
+    encrpt.title("encrypt")
 
-    path = " "
+    message=StringVar()
+    path=StringVar
+    path=filename
 
-    def image(path):
-        print(path)
+    lb1=Label(encrpt,text='WELCOME!!!!',bg='maroon',fg="white").place(relx=0.4,rely=0.1)
 
-    def hide_msg(path, message):
-        hide = lsb.hide(path.get(), message.get())
-        message_time = datetime.datetime.now().strftime("%y%m%d%H%M%S")
-        hide.save('secrt_pic' + message_time + '.jpg')
-        msBox.showinfo("Saved", "image has been saved with name secrt_pic" + message_time + '.jpg')
+    lb2=Label(encrpt,text='ENTER THE MESSAGE IN YOUR IMAGE',bg='maroon',fg="white").place(relx=0.3,rely=0.3)
+
+    lb4=Entry(encrpt,textvariable=message,bd=4).place(rely=0.5,relheight=0.1,relwidth=1)
+
+
+    but0=Button(encrpt,text='encrypt',bd=2,command=lambda:encrpt_ok(filename,message.get())).place(rely=0.7,relx=0.4,relheight=0.2,relwidth=0.2)
+
+def dec(filename):
+    decrypt_message=lsb.reveal(filename)
+    decryptmess=decrypt_message
+
+    dec=Toplevel(root)
+    dec.geometry("400x200")
+    dec.config(bg="maroon")
+    dec.title("decode")
 
     path = StringVar()
-    but1 = Button(tab1, text="Search Image", fg='black', bg='red', width=20, command=lambda: browse(path))
-    but1.place(relx=0.25, rely=0.02)
-
-    path_entry = Entry(tab1, width=30, borderwidth=2, textvariable=path)
-    path_entry.place(relx=0.25, rely=0.15)
-    sms = StringVar()
-    message = Label(tab1, text="Message", fg='black', bg='red', font=(" ", 15))
-    message.place(relx=0.25, rely=0.30)
-    msg = StringVar()
-    msg_entry = Entry(tab1, width=30, borderwidth=2, textvariable=msg)
-
-    msg_entry.place(relx=0.25, rely=0.43)
-    enc = Button(tab1, text="Encode", fg='black', bg='yellow', command=lambda: hide_msg(path, msg))
-    enc.place(relx=0.4, rely=0.85)
-    upload_butn = Button(tab1, text="save", fg='black', bg='yellow')
-    upload_butn.place(relx=0.8, rely=0.85)
-    # for decoding
-    path2 = " "
-
-    def browser(path):
-        filename = filedialog.askopenfilename()
-        if re.search('\.png$', filename) or re.search('\.jpg$', filename):
-            path_entry1.config(text="path to the file")
-            path_entry1.insert(0, filename)
+    yam=StringVar()
+    yam=decryptmess
+    path=filename
 
 
-        else:
-            msBox.showinfo("you have choosen a wrong file, it is neither jpg nor png")
+    lab1=Label(dec,text="welcome!!!",bg='maroon',fg='white').place(relx=0.4,rely=0.05)
 
-    def images(path):
-        print(path)
+    lab2=Label(dec,text='VIEW THE SECRETE MESSAGE!!!!!',bg="maroon",fg="white").place(relx=0.3,rely=0.2)
 
-    def enc(path):
-        print(path)
-        sms = lsb.reveal(path)
-        print(sms)
+    lab3=Label(dec,text=yam,bg='maroon',fg='white',bd=5).place(relx=0.2,rely=0.4)
 
-    but2 = Button(tab2, text="Search Image", fg="black", bg='yellow', width=10, command=lambda: browser(path))
-    but2.place(relx=0.25, rely=0.02)
-    path_entry1 = Entry(tab2, width=30, borderwidth=2)
-    path_entry1.place(relx=0.25, rely=0.15)
-    sms1 = StringVar()
-    but3 = Button(tab2, text=" View message", fg="black", bg='green', font=(" ", 15))
-    but3.place(relx=0.25, rely=0.30)
-    dec = Button(tab2, text="Decode", fg="black", bg="red", command=lambda: images(path))
-    dec.place(relx=0.4, rely=0)
+
+    lab4=Label(dec,text="visit 2020 NEPAL" ,bg="maroon",fg="white").place(relx=0.3,rely=0.6)
+
+
+#gui for encrypt & decrypt
+def click():
+
+    root=Toplevel()
+    root.geometry("400x200")
+    root.resizable(0,0)
+    root.config(bg="skyblue")
+
+
+    choose=Button(root,text='choose image',command=browse,bg="maroon",bd=4,fg="white").place(relx=0.4,rely=0.2)
+    encrp=Button(root,text="Encrypt",command=lambda:enc(filename),bd=4,bg="maroon",fg="white" ).place(relx=0.4,rely=0.4)
+    decrypt=Button(root,text='Decrypt',bg="maroon",fg="white",bd=4,command=lambda :dec(filename)).place(relx=0.4,rely=0.6)
+    root.mainloop()
 
 #For diplaying that the sign up process is completed / account is registered
 def submit():
@@ -96,8 +82,6 @@ def submit():
     Label(top, text='Welcome to the world of Secret Chat!!', font=("", 14), fg="green").place(relx=0.02,rely=0.3)
     but1 = Button(top, text='OK', font=("", 14), fg="red", command=lambda: top.destroy())
     but1.place(relx=0.4,rely=0.5)
-
-
 
 #For Registration/Sign up Page
 def signup():
@@ -141,7 +125,7 @@ def signup():
     last_entry= Entry(sign, textvariable='Last Name', font=("", 12))
     last_entry.place(relx=0.3, rely=0.3)
 
-    label_5=Label(sign, text='Password', font=("", 12))
+    label_5 = Label(sign, text='Password', font=("", 12))
     label_5.place(relx=0.03, rely=0.4)
     password_entry = Entry(sign, textvariable='Password', font=("", 12))
     password_entry.place(relx=0.3, rely=0.4)
